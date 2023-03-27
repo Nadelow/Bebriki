@@ -1,0 +1,11 @@
+1 LET n=123
+2 LET t=0
+3 LET d=0
+4 FOR t=2 TO n
+5 FOR d=2 TO t
+6 IF (t-(t/d)*d)=0 GOTO 10
+7 NEXT d
+8 IF (n-(n/t)*t)<>0 GOTO 10
+9 LET ou=t
+10 NEXT t
+11 END

@@ -1,0 +1,13 @@
+1 LET n=31
+2 LET m=0
+3 LET d=0
+4 REM
+5 FOR m=2 TO n
+6 FOR d=2 TO m
+7 IF(m-(m/10)*d)=0 GOTO 10
+8 NEXT d
+9 IF n=(2^m)-1 GOTO 12
+10 NEXT m
+11 GOTO 13
+12 REM morv
+13 END

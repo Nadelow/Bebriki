@@ -1,0 +1,19 @@
+1 LET n=25
+2 LET nz=0
+3 LET nk=0
+4 IF n=0 GOTO 9
+5 LET No=n-(n/3)*3
+6 LET n=(n/3)
+7 LET nz=10*nz+No
+8 GOTO 4
+9 IF nz=0 GOTO 17
+10 LETtr=nz-(nz/10)*10
+11 IF tr=1 GOTO 14
+12 LET nz=nz/10
+13 GOTO 9
+14 LET cou=cou+1
+15 LET nz=nz/10
+16 GOTO 9
+17 IF cou-(cou/2)*2<>0 GOTO 19
+18 REM chetn
+19 END
