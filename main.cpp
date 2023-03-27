@@ -96,6 +96,201 @@ public:
         else if (ch == EOF) { return EndOfFile; }
         //else { return Error; }
     }
+    bool Get_lexem(int line, string lexem) {
+        if (lexem.size() < 2)
+            return false;
+        if (lexem == "IF") {
+            lexems.push_back(Token(line, string("k_if"), lexem));
+            return true;
+        }
+        if (lexem == "LET") {
+            lexems.push_back(Token(line, string("k_let"), lexem));
+            return true;
+        }
+        if (lexem == "GOSUB") {
+            lexems.push_back(Token(line, string("k_gosub"), lexem));
+            return true;
+        }
+        if (lexem == "END") {
+            lexems.push_back(Token(line, string("k_end"), lexem));
+            return true;
+        }
+        if (lexem == "NEXT") {
+            lexems.push_back(Token(line, string("k_next"), lexem));
+            return true;
+        }
+        if (lexem == "REM") {
+            lexems.push_back(Token(line, string("k_rem"), lexem));
+            return true;
+        }
+        if (lexem == "RETURN") {
+            lexems.push_back(Token(line, string("k_return"), lexem));
+            return true;
+        }
+        if (lexem == "STEP") {
+            lexems.push_back(Token(line, string("k_step"), lexem));
+            return true;
+        }
+        if (lexem == "GOTO") {
+            lexems.push_back(Token(line, string("k_goto"), lexem));
+            return true;
+        }
+        if (lexem == "TO") {
+            lexems.push_back(Token(line, string("k_to"), lexem));
+            return true;
+        }
+        if (lexem == "FOR") {
+            lexems.push_back(Token(line, string("k_for"), lexem));
+            return true;
+        }
+        return false;
+    }
+    //Процедуры автомата
+
+    int s_A1()
+    {
+        return A1;
+    }
+    int s_A1a()
+    {
+        lex.push_back(s);
+        s.clear();
+        s.reg_str++;
+        return A1;
+    }
+    int s_A1b()
+    {
+        s_DA1D();
+        return A1;
+    }
+    int s_A1c()
+    {
+        s_DA2D();
+        return A1;
+    }
+    int s_A1d()
+    {
+        s_DA3D();
+        return A1;
+    }
+    int s_A1e()
+    {
+        s_DA1E();
+        return A1;
+    }
+    int s_A2c()
+    {
+        s_DA1D();
+        return A2;
+    }
+    int s_A2g()
+    {
+        lex.push_back(s);
+        s.clear();
+        s.reg_str++;
+        return A2;
+    }
+    int s_A2a()
+    {
+        s.token_class = AR_OP;
+        return A2;
+    }
+    int s_A2b()
+    {
+        if (buffer[i] == '\0') {
+            if (lexem.size() > 0)
+                if (!(Get_lexem(line, lexem)))
+                    if (isdigit(lexem[0]))
+                        if (mark)
+                            lexems.push_back(Token(line, string("Error"), string("Empty line")));
+                        else
+                            lexems.push_back(Token(line, string("Constant"), lexem));
+                    else
+                        lexems.push_back(Token(line, string("Variable"), lexem));
+            if (lexems.back().lexem_type == string("Mark"))
+                lexems.push_back(Token(line, string("Error"), string("Empty line")));
+            lexem.clear();
+            word = false;
+            constant = false;
+            return 1;
+        }
+        return 0;
+    }
+    int s_A2()
+    {
+        lexem.clear();
+        copy.clear();
+        mark = true;
+        constant = false;
+        word = false;
+        skip_point = false;
+        is_rem = false;
+        return A2;
+    }
+    int s_A2d()
+    {
+        s_DA2D();
+        return A2;
+    }
+    int s_A2e()
+    {
+        return A2;
+    }
+    int s_A2f()
+    {
+        return A2;
+    }
+    int s_A2j()
+    {
+        return A2;
+    }
+    int s_A2k()
+    {
+        return A2;
+    }
+    int s_A2h()
+    {
+        s.token_class = Left_bracket;
+        lex.push_back(s);
+        s.clear();
+        s.reg_str++;
+        return A2;
+    }
+    int s_A2l()
+    {
+        return A2;
+    }
+    int s_A2m()
+    {
+        return A2;
+    }
+    int s_A2n()
+    {
+        return A2;
+    }
+    int s_A2o()
+    {
+        if (s.relat_reg != "=") {
+            //error
+        }
+        return A2;
+    }
+    int s_A2p()
+    {
+        return A2;
+    }
+    int s_A2q()
+    {
+        return A2;
+    }
+    int s_A2r()
+    {
+        return A2;
+    }
+    int s_A2s()
+    {
+        return A2;
+    }
     
     Parser() {
         for (int i = 0; i < state_number; i++)
