@@ -585,6 +585,370 @@ public:
         lexems.push_back(Token(line, string("Left_bracket"), string("(")));
         return D2;
     }
+    int s_D3a()
+    {
+        return D3;
+    }
+    int s_D3()
+    {
+        return D3;
+    }
+    int s_D4a()
+    {
+        return D4;
+    }
+    int s_D4()
+    {
+        return D4;
+    }
+    int s_D5a()
+    {
+        return D5;
+    }
+    int s_D5b()
+    {
+        return D5;
+    }
+    int s_D5()
+    {
+        return D5;
+    }
+    int s_D5c()
+    {
+        return D5;
+    }
+    int s_D6a()
+    {
+        return D6;
+    }
+    int s_D6()
+    {
+        return D6;
+    }
+    int s_E1a()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        lexem.clear();
+        word = false;
+        constant = false;
+        lexems.push_back(Token(line, string("AR_OP"), string("^")));
+        return E1;
+    }
+    int s_E1()
+    {
+        return E1;
+    }
+    int s_E1b()
+    {
+        return E1;
+    }
+    int s_E2a()
+    {
+        return E2;
+    }
+    int s_E2b()
+    {
+        return E2;
+    }
+    int s_E2()
+    {
+        return E2;
+    }
+    int s_E2c()
+    {
+        return E2;
+    }
+    int s_F1a()
+    {
+        return F1;
+    }
+    int s_F1()
+    {
+        return F1;
+    }
+    int s_F1b()
+    {
+        if (isalpha(buffer[i])) {
+            if (lexem.size() == 0) {
+                word = true;
+                lexem += buffer[i];
+            }
+            else {
+                s_G1();
+            }
+            return 1;
+        }
+        return 0;
+    }
+    int s_F2a()
+    {
+        return F2;
+    }
+    int s_F2()
+    {
+        if (lexem.size() > 0)
+            if (constant)
+                lexem += buffer[i];
+            else {
+                lexem.clear();
+                word = false;
+                constant = false;
+                lexems.push_back(Token(line, string("Error"), string("Error with point")));
+                return 1;
+            }
+        constant = true;
+        return 0;
+    }
+    int s_F3a()
+    {
+        return F3;
+    }
+    int s_F3()
+    {
+        return F3;
+    }
+    int s_G1a()
+    {
+        return G1;
+    }
+    int s_G1()
+    {
+        if (word)
+            lexem += buffer[i];
+        else {
+            if (buffer[i] == 'E')
+                lexem += buffer[i];
+            else {
+                constant = false;
+                word = true;
+                lexems.push_back(Token(line, string("Constant"), lexem));
+                copy.clear();
+                copy = lexem;
+                lexem.clear();
+                lexem += buffer[i];
+            }
+        }
+        return G1;
+    }
+    int s_H1c()
+    {
+        return H1;
+    }
+    int s_H1b()
+    {
+        return H1;
+    }
+    int s_H1a()
+    {
+        return H1;
+    }
+    int s_H1()
+    {
+        return H1;
+    }
+    int s_H1d()
+    {
+        return H1;
+    }
+    int s_H1e()
+    {
+        return H1;
+    }
+    int s_H1f()
+    {
+        if (!Get_lexem(line, lexem)) {
+            lexems.pop_back();
+            lexems.push_back(Token(line, string("Error"), string("Error in constant")));
+            lexem.clear();
+            copy.clear();
+            constant = false;
+            word = false;
+        }
+        else {
+            lexem.clear();
+            copy.clear();
+            constant = false;
+            word = false;
+        }
+        return H1;
+    }
+    int s_M1()
+    {
+        return 0;
+    }
+    int s_M2()
+    {
+        if (isdigit(buffer[i])) {
+            if (lexem.size() == 0) {
+                constant = true;
+                lexem += buffer[i];
+            }
+            else {
+                if (constant)
+                    lexem += buffer[i];
+                else {
+                    if (Get_lexem(line, lexem)) {
+                        lexem.clear();
+                        lexem += buffer[i];
+                        constant = true;
+                        word = false;
+                        return 1;
+                    }
+                    lexem += buffer[i];
+                    return 1;
+                }
+            }
+            return 1;
+        }
+        return 0;
+    }
+    int s_M3()
+    {
+        return 0;
+    }
+    int Exit3()
+    {
+        return 0;
+    }
+    int Exit2()
+    {
+        return 0;
+    }
+    int Exit1()
+    {
+        while (getline(file, buffer)) {
+            s_A2();
+            line++;
+            for (i = 0; i < buffer.size() + 1; i++) {
+                if (skip_point) {
+                    skip_point = false;
+                    continue;
+                }
+                if (is_rem) {
+                    break;
+                }
+                if (s_A2b()) 
+                    continue;
+                if (s_A3a()) 
+                    continue;
+                if (s_F1b()) 
+                    continue;
+                else if (copy.size() > 0) {
+                    s_H1f();
+                }
+                if (s_M2())
+                    continue;
+                switch (buffer[i]) {
+                case '.':
+                    if (s_F2())
+                        continue;
+                    continue;
+                case '(':
+                    s_D2c();
+                    continue;
+                case ')':
+                    s_D2a();
+                    continue;
+                case ' ':
+                    s_B1b();
+                    continue;
+                case '\t':
+                    s_C1();
+                    continue;
+                case '+':
+                    s_A3b();
+                    continue;
+                case '-':
+                    if (s_D1a())
+                        continue;
+                    s_C2a();
+                    continue;
+                case '/':
+                    s_B1d();
+                    continue;
+                case '^':
+                    s_E1a();
+                    continue;
+                case '*':
+                    s_B1();
+                    continue;
+                case '=':
+                    s_A3f();
+                    continue;
+                case '<':
+                    s_A3d();
+                    if (s_A2t())
+                        continue;
+                    continue;
+                case '>':
+                    s_A3d();
+                    if (s_A2u())
+                        continue;
+                    continue;
+                default:
+                    if (lexem == "REM")
+                        is_rem = true;
+                    else
+                        lexems.push_back(Token(line, string("Error"), string("Unknown simbol")));
+                    lexem.clear();
+                    word = false;
+                    constant = false;
+                    continue;
+                }
+            }
+        }
+        for (int i = 0; i < lexems.size(); i++)
+            if (lexems[i].lexem_type != "rem_cont")
+                cout << lexems[i].line << '\t' << lexems[i].lexem_type << '\t' << lexems[i].lexem_name << endl;
+        lexems.push_back(Token(line + 1, string("EOF"), string("EOF")));
+        copy.clear();
+        lexem.clear();
+        buffer.clear();
+        file.close();
+        return 0;
+    }
+    int Exit4()
+    {
+        return 0;
+    }
+    int Exit5()
+    {
+        return 0;
+    }
+    int Exit6()
+    {
+        return 0;
+    }
+    int Error()
+    {
+        return 0;
+    }
+    int s_DA1D()
+    {
+        //s.token_reg = 0;
+        return 0;
+    }
+    int s_DA2D()
+    {
+        return 0;
+    }
+    int s_DA3D()
+    {
+        return 0;
+    }
+    int s_DA1E()
+    {
+        return 0;
+    }
+    int s_DA1ETSICL()
+    {
+        return 0;
+    }
     Parser() {
         for (int i = 0; i < state_number; i++)
             for (int j = 0; j < class_number; j++)
@@ -630,7 +994,7 @@ public:
 }
 int main()
 {
-
+    Parser obj;
 
     return 0;
 }
