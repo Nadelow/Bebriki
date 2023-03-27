@@ -60,7 +60,43 @@ string toString(int val)
 const int state_number = 19; //  число состояний без s_Stop
 const int class_number = 11; //  число символов входного алфавита
 ifstream file("input.txt");
+//
+class Parser
+{
+    LexemToken s;
+    int ch;
+    typedef int(Parser::* function_pointer)();
+    function_pointer table[state_number][class_number];
+    string data;
+    string buffer;
+    string lexem;
+    string copy;
+    int line = 0;
+    int i = 0;
+    bool mark = true;
+    bool constant = false;
+    bool word = false;
+    bool skip_point = false;
+    bool is_rem = false;
+public:
+    vector <Token> lexems;
+    vector<LexemToken> lex;
+    vector<int> konst;
+    vector<string> var;
 
+    SymbolicTokenClass identification(int c) {
+        ch = c;
+        if ((ch >= 192 && ch <= 255)) { return Alpha; }
+        else if (isalpha(ch)) { return Alpha; }
+        else if (isdigit(ch)) { return Digit; }
+        else if (ch == '+' || ch == '-' || ch == '/' || ch == '%' || ch == '*') { return AR_OP; }
+        else if (ch == '>' || ch == '<' || ch == '=' || ch == '!') { return Bool; }
+        else if (ch == ' ') { return Space; }
+        else if (ch == '\n') { return EndOfString; }
+        else if (ch == EOF) { return EndOfFile; }
+        //else { return Error; }
+    }
+}
 int main()
 {
 
