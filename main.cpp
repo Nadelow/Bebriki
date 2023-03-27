@@ -291,7 +291,300 @@ public:
     {
         return A2;
     }
-    
+    int s_A2t()
+    {
+        if (buffer[i + 1] == '=') {
+            lexems.push_back(Token(line, string("Bool_op"), string("<=")));	skip_point = true; return 1;
+        }
+        if (buffer[i + 1] == '>') {
+            lexems.push_back(Token(line, string("Bool_op"), string("<>")));	skip_point = true; return 1;
+        }
+        if (buffer[i + 1] == '<') {
+            lexems.push_back(Token(line, string("Error"), string("Error in bool operator"))); skip_point = true; return 1;
+        }
+        lexems.push_back(Token(line, string("Bool_op"), string("<")));
+        return 0;
+    }
+    int s_A2u()
+    {
+        if (buffer[i + 1] == '=') {
+            lexems.push_back(Token(line, string("Bool_op"), string(">=")));	skip_point = true; return 1;
+        }
+        if (buffer[i + 1] == '>') {
+            lexems.push_back(Token(line, string("Error"), string("Error in bool operator"))); skip_point = true; return 1;
+        }
+        if (buffer[i + 1] == '<') {
+            lexems.push_back(Token(line, string("Error"), string("Error in bool operator"))); skip_point = true; return 1;
+        }
+        lexems.push_back(Token(line, string("Bool_op"), string(">")));
+        return 0;
+    }
+    int s_A3a()
+    {
+        if (mark) {
+            if (isdigit(buffer[i])) {
+                lexem += buffer[i];
+                return 1;
+            }
+            else {
+                if (lexem.size() > 0)
+                    lexems.push_back(Token(line, string("Mark"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Error"), string("Error in Mark")));
+                mark = false;
+                lexem.clear();
+            }
+        }
+        return 0;
+    }
+    int s_A3()
+    {
+        return A3;
+    }
+    int s_A3d()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "REM")
+            is_rem = true;
+        lexem.clear();
+        word = false;
+        constant = false;
+        return A3;
+    }
+    int s_A3c()
+    {
+        return A3;
+    }
+    int s_A3b()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "REM")
+            is_rem = true;
+        lexem.clear();
+        word = false;
+        constant = false;
+        lexems.push_back(Token(line, string("AR_OP"), string("+")));
+        return A3;
+    }
+    int s_A3e()
+    {
+        return A3;
+    }
+    int s_A3f()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "REM")
+            is_rem = true;
+        lexem.clear();
+        word = false;
+        constant = false;
+        lexems.push_back(Token(line, string("Equality"), string("=")));
+        return A3;
+    }
+    int s_A3g()
+    {
+        return A3;
+    }
+    int s_B1c()
+    {
+        return B1;
+    }
+    int s_B1b()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "REM") {
+            is_rem = true;
+            int k = 2;
+            while ((buffer[k - 2] != 'R') and (buffer[k - 1] != 'E') and (buffer[k] != 'M'))
+                k++;
+            buffer.erase(buffer.begin(), buffer.begin() + k + 2);
+            lexems.push_back(Token(line, string("rem_cont"), buffer));
+        }
+        lexem.clear();
+        word = false;
+        constant = false;
+        return B1;
+    }
+    int s_B1a()
+    {
+        return B1;
+    }
+    int s_B1()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "REM")
+            is_rem = true;
+        lexem.clear();
+        word = false;
+        constant = false;
+        lexems.push_back(Token(line, string("AR_OP"), string("*")));
+        return B1;
+    }
+    int s_B1d()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "REM")
+            is_rem = true;
+        lexem.clear();
+        word = false;
+        constant = false;
+        lexems.push_back(Token(line, string("AR_OP"), string("/")));
+        return B1;
+    }
+    int s_B1e()
+    {
+        return B1;
+    }
+    int s_C1a()
+    {
+        return C1;
+    }
+    int s_C1()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "REM")
+            is_rem = true;
+        lexem.clear();
+        word = false;
+        constant = false;
+        return C1;
+    }
+    int s_C2b()
+    {
+        return C2;
+    }
+    int s_C2a()
+    {
+        if (lexem.size() == 0) {
+            if ((lexems.back().lexem_type != string("Constant")) and (lexems.back().lexem_type != string("Variable")) and (lexems.back().lexem_type != string("Right_bracket"))) {
+                constant = true;
+                lexem += buffer[i];
+            }
+            lexem.clear();
+            word = false;
+            constant = false;
+            lexems.push_back(Token(line, string("AR_OP"), string("-")));
+        }
+        else {
+            lexem.clear();
+            word = false;
+            constant = false;
+            lexems.push_back(Token(line, string("AR_OP"), string("-")));
+        }
+        return C2;
+    }
+    int s_C2d()
+    {
+        return C2;
+    }
+    int s_C2()
+    {
+        return C2;
+    }
+    int s_D1c()
+    {
+        return D1;
+    }
+    int s_D1a()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    if (lexem[lexem.size() - 1] == 'E') {
+                        lexem += buffer[i];
+                        return 1;
+                    }
+                    else
+                        lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "REM")
+            is_rem = true;
+        return 0;
+    }
+    int s_D1b()
+    {
+        return D1;
+    }
+    int s_D1()
+    {
+        return D1;
+    }
+    int s_D2a()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "rem")
+            is_rem = true;
+        lexem.clear();
+        word = false;
+        constant = false;
+        lexems.push_back(Token(line, string("Right_bracket"), string(")")));
+        return D2;
+    }
+    int s_D2()
+    {
+        return D2;
+    }
+    int s_D2b()
+    {
+        return D2;
+    }
+    int s_D2c()
+    {
+        if (lexem.size() > 0)
+            if (!(Get_lexem(line, lexem)))
+                if (isdigit(lexem[0]))
+                    lexems.push_back(Token(line, string("Constant"), lexem));
+                else
+                    lexems.push_back(Token(line, string("Variable"), lexem));
+        if (lexem == "rem")
+            is_rem = true;
+        lexem.clear();
+        word = false;
+        constant = false;
+        lexems.push_back(Token(line, string("Left_bracket"), string("(")));
+        return D2;
+    }
     Parser() {
         for (int i = 0; i < state_number; i++)
             for (int j = 0; j < class_number; j++)
