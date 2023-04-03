@@ -5,41 +5,27 @@ class Translator
 {
 public:
     /*
-    * @brief Транслирует код из filename (Пока что есть только лексический блок)
-    * @param filename: имя файла с программой
+    * @brief РўСЂР°РЅСЃР»РёСЂСѓРµС‚ РєРѕРґ РёР· filename (РџРѕРєР° С‡С‚Рѕ РµСЃС‚СЊ С‚РѕР»СЊРєРѕ Р»РµРєСЃРёС‡РµСЃРєРёР№ Р±Р»РѕРє)
+    * @param filename: РёРјСЏ С„Р°Р№Р»Р° СЃ РїСЂРѕРіСЂР°РјРјРѕР№
     */
-    void Translate(std::string filename)
-    {
-        ;
-    }
+    void Translate(std::string filename);
 
     /*
-    * @brief Разбивает программу на лексемы и выводит их
-    * @param filename: имя файла с программой
-    * @param toPrint: true, чтобы вывести лексемы на экран, false - не выводить (по умолчанию false)
-    * @returns m_lexems: вектор лексем
+    * @brief Р Р°Р·Р±РёРІР°РµС‚ РїСЂРѕРіСЂР°РјРјСѓ РЅР° Р»РµРєСЃРµРјС‹ Рё РІС‹РІРѕРґРёС‚ РёС…
+    * @param filename: РёРјСЏ С„Р°Р№Р»Р° СЃ РїСЂРѕРіСЂР°РјРјРѕР№
+    * @param toPrint: true, С‡С‚РѕР±С‹ РІС‹РІРµСЃС‚Рё Р»РµРєСЃРµРјС‹ РЅР° СЌРєСЂР°РЅ, false - РЅРµ РІС‹РІРѕРґРёС‚СЊ (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ false)
+    * @returns m_lexems: РІРµРєС‚РѕСЂ Р»РµРєСЃРµРј
     */
-    std::vector<Token> GetLexems(std::string filename, bool toPrint = false)
-    {
-        m_lexems = m_lexer.Run(filename);
-
-        if (toPrint)
-            m_lexer.Print();
-
-        return m_lexems;
-    }
+    std::vector<Token> GetLexems(std::string filename, bool toPrint = false);
 
     /*
-    * @brief Проверяет синтаксис программы
-    * @param filename: имя файла с программой
-    * @returns true - программа подходит, false - не подходит
+    * @brief РџСЂРѕРІРµСЂСЏРµС‚ СЃРёРЅС‚Р°РєСЃРёСЃ РїСЂРѕРіСЂР°РјРјС‹
+    * @param filename: РёРјСЏ С„Р°Р№Р»Р° СЃ РїСЂРѕРіСЂР°РјРјРѕР№
+    * @returns true - РїСЂРѕРіСЂР°РјРјР° РїРѕРґС…РѕРґРёС‚, false - РЅРµ РїРѕРґС…РѕРґРёС‚
     */
-    bool CheckSyntax(std::string filename)
-    {
-        return true;
-    }
+    bool CheckSyntax(std::string filename);
 private:
-    LexicalBlock m_lexer;       // лексический блок
-    std::vector<Token> m_lexems;// вектор лексем
+    LexicalBlock m_lexer;       // Р»РµРєСЃРёС‡РµСЃРєРёР№ Р±Р»РѕРє
+    std::vector<Token> m_lexems;// РІРµРєС‚РѕСЂ Р»РµРєСЃРµРј
 };
 
