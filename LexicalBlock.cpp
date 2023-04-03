@@ -439,14 +439,6 @@ std::vector <Token> LexicalBlock::Run(std::string filename)
     return m_lexems;
 }
 
-void LexicalBlock::Print() 
-{
-    if (!m_lexems.empty())
-        for (int i = 0; i < m_lexems.size() - 1; i++)
-            if (m_lexems[i].lexem_type != "rem_cont")
-                std::cout << m_lexems[i].line << '\t' << m_lexems[i].lexem_type << '\t' << m_lexems[i].lexem_name << std::endl;
-}
-
 SymbolicTokenClass LexicalBlock::identification(int c)
 {
     m_ch = c;
