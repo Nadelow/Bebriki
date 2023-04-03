@@ -4,9 +4,9 @@
 #include <vector>
 
 struct Token {
-    int line;               // номер строки
-    std::string lexem_type; // тип лексемы
-    std::string lexem_name; // лексема
+    int line;               // РЅРѕРјРµСЂ СЃС‚СЂРѕРєРё
+    std::string lexem_type; // С‚РёРї Р»РµРєСЃРµРјС‹
+    std::string lexem_name; // Р»РµРєСЃРµРјР°
 
     Token(int cur_line, std::string type, std::string name) {
         line = cur_line;
@@ -18,11 +18,15 @@ struct Token {
 class LexBase
 {
 public:
-	virtual ~LexBase() { ; }
+    virtual ~LexBase();
 	virtual std::vector<Token> Run(std::string filename) = 0;
-    virtual void Print() = 0;
+
+    /*
+    * @brief РїРµС‡Р°С‚Р°РµС‚ СЃРїРёСЃРѕРє Р»РµРєСЃРµРј
+    */
+    virtual void Print();
 protected:
-	std::ifstream file;	            // файл с программой
-    std::vector<Token> m_lexems;	// вектор лексем
+	std::ifstream file;	            // С„Р°Р№Р» СЃ РїСЂРѕРіСЂР°РјРјРѕР№
+    std::vector<Token> m_lexems;	// РІРµРєС‚РѕСЂ Р»РµРєСЃРµРј
 };
 
