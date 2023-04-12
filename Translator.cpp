@@ -7,7 +7,7 @@ void Translator::Translate(std::string filename)
 {
 }
 
-std::vector<Token> Translator::GetLexems(std::string filename, bool toPrint)
+std::vector<Token> Translator::RunLexer(std::string filename, bool toPrint)
 {
     m_lexems = m_lexer.Run(filename);
 
@@ -17,7 +17,7 @@ std::vector<Token> Translator::GetLexems(std::string filename, bool toPrint)
     return m_lexems;
 }
 
-bool Translator::CheckSyntax(std::string filename)
+void Translator::CheckSyntax()
 {
-    return false;
+    m_synt.Run(m_lexems);
 }
