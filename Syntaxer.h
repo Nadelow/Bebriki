@@ -113,3 +113,60 @@ struct atom
 	int atribute4;
 
 };
+
+
+/*
+* @brief Класс Синтаксического анализатора,выполняющий синтаксический анализ программы
+*/
+class Syntaxer
+	: public SyntBase
+{
+public:
+
+	Syntaxer();
+
+	/*
+	* @brief Проверяет синтаксис программы и сообщает правильно она написана или нет
+	* @param lexems: Вектор лексем
+	*/
+	void start(std::vector<Token> lexems);
+
+protected:
+
+	std::stack <int> m_st;				// магазин
+
+	syntLexemes cur = S_ENDM;			// текущее состояние
+
+	int m_strNum = 0;					// текущая строка
+	int m_poz = 0;						//  текущая позиция
+	int m_HOBTX = 0;
+	int m_HOBT = 0;
+	int m_HOBTAM = 0;
+
+	std::vector<atom> m_TA;				// Вектор атомов
+
+	std::vector <Token> m_lex;			// Вектор лексем
+
+	std::vector <int> m_for_next;		// Вектор 
+	std::vector <int> m_labels;			// Вектор счетчик строк
+	std::vector <int> m_marks;			// Вектор меток
+
+	static const int m_nsize = 34;
+	static const int m_msize = 23;
+
+	typedef void(Syntaxer::* func)();
+	func m_synt_table[m_nsize][m_msize];
+private:
+
+	std::vector <bool> m_is_correct;                       // вектор результатов проверки строк
+
+	std::vector <std::string> m_line;                      // текущая строка
+	std::vector <std::vector<std::string>> m_lines;        // вектор всех строк
+
+	bool m_key = false;                                    // метка ключевого слова
+	bool m_is_ended = false;                               // метка end
+
+	int m_i = 0;                                           // позиция в строке
+	int m_brackets = 0;                                    // счётчик скобок
+	int m_gosub_return = 0;                                // счётчик gosub/return
+};
