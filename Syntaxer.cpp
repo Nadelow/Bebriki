@@ -1,4 +1,4 @@
-﻿// This is a personal academic project. Dear PVS-Studio, please check it.
+// This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 #include "Syntaxer.h"
@@ -70,7 +70,7 @@ Syntaxer::~Syntaxer()
 {
 }
 
-void Syntaxer::start(std::vector<Token> lexems)
+void Syntaxer::Run(std::vector<Token> lexems)
 {
 	m_lex = lexems;
 	while (m_i != m_lex.size()) 
