@@ -51,3 +51,31 @@ std::vector<std::vector<std::string>> CodeGenerator::Run(std::vector<Token> lexe
 {
 	return std::vector<std::vector<std::string>>();
 }
+
+bool CodeGenerator::Rem()
+{
+	if (m_lines[m_j][1] == "REM") {
+		m_out << "@@Label_" << (stoi(m_lines[m_j][0]) + 1) << ":\n";
+		m_out << "\t\t\t\t\t;";
+		for (int i = 2; i < m_lines[m_j].size(); i++)
+			m_out << m_lines[m_j][i];
+		m_out << "\n";
+		m_temp_point++;
+		m_j++;
+		return true;
+	}
+	return false;
+}
+
+bool CodeGenerator::Gosub()
+{
+	if (m_lines[m_j][1] == "GOSUB") 
+	{
+		m_out << "@@Label_" << (stoi(m_lines[m_j][0]) + 1) << ":\n";
+		m_out << "\tST 10, #" << m_temp_point << "\n";
+		m_out << "\tjmp @@Label_" << stoi(m_lines[m_j][2]) + 1 << "\n";
+		m_j++;
+		return true;
+	}
+	return false;
+}
