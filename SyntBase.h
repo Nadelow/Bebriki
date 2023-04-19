@@ -5,14 +5,12 @@ class SyntBase :
     public LexBase
 {
 public:
-    virtual ~SyntBase() = 0;
-    virtual void Run(std::vector<Token> lexem) = 0;
+    //virtual ~SyntBase() = 0;
+    virtual std::vector<std::vector<std::string>> Run(std::vector<Token> lexem) = 0;
 protected:
     /*
-    * @brief РџРµСЂРµРѕРїСЂРµРґРµР»РµРЅРёРµ Run РёР· LexBase.h РґР»СЏ РёР·Р±РµР¶Р°РЅРёСЏ РѕС€РёР±РѕРє
+    * @brief Переопределение Run из LexBase.h для избежания ошибок
     */
     std::vector<Token> Run(std::string filename);
-protected:
-    std::vector<Token> m_lex; // РІРµРєС‚РѕСЂ Р»РµРєСЃРµРј
 };
 

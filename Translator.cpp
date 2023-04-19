@@ -5,19 +5,26 @@
 
 void Translator::Translate(std::string filename)
 {
+    RunLexer(filename);
+    CheckSyntax();
+    TranslateCode();
 }
 
-std::vector<Token> Translator::RunLexer(std::string filename, bool toPrint)
+std::vector<Token> Translator::RunLexer(std::string filename)
 {
     m_lexems = m_lexer.Run(filename);
-
-    if (toPrint)
-        m_lexer.Print();
-
+    m_lexer.Print();
     return m_lexems;
 }
 
-void Translator::CheckSyntax()
+std::vector<std::vector<std::string>> Translator::CheckSyntax()
 {
-    m_synt.Run(m_lexems);
+    m_lines = m_synt.Run(m_lexems);
+    return m_lines;
+}
+
+void Translator::TranslateCode()
+{
+    m_gen.CodeCreator(m_lines);
+    std::cout << "Translated code is in out.txt" << std::endl;
 }

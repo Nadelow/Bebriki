@@ -1,4 +1,4 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
+﻿// This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
 
 #include "Syntaxer.h"
@@ -70,7 +70,7 @@ Syntaxer::~Syntaxer()
 {
 }
 
-void Syntaxer::Run(std::vector<Token> lexems)
+std::vector<std::vector<std::string>> Syntaxer::Run(std::vector<Token> lexems)
 {
 	m_lex = lexems;
 	while (m_i != m_lex.size()) 
@@ -170,6 +170,8 @@ void Syntaxer::Run(std::vector<Token> lexems)
 		if (!m_is_correct[i]) { std::cout << "String " << i + 1 << " has some errors. You must fix it or destroy this string" << std::endl; m_key = false; }
 	if (!m_key) std::cout << "Program contains too much exeptions, fix them" << std::endl;
 	else std::cout << "Program was accepted for translation" << std::endl;
+
+	return m_lines;
 }
 
 bool Syntaxer::f1() 

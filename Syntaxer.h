@@ -1,3 +1,4 @@
+﻿#pragma once
 #include <iostream>
 #include <iomanip>
 #include <stack>
@@ -123,12 +124,14 @@ class Syntaxer
 public:
 
 	Syntaxer();
+	~Syntaxer();
 
 	/*
 	* @brief Проверяет синтаксис программы и сообщает правильно она написана или нет
 	* @param lexems: Вектор лексем
+	* @returns m_lines: Вектор строк
 	*/
-	void Run(std::vector<Token> lexem);
+	std::vector<std::vector<std::string>> Run(std::vector<Token> lexem);
 
 protected:
 
