@@ -154,3 +154,28 @@ bool CodeGenerator::Return()
 	}
 	return false;
 }
+
+bool CodeGenerator::End()
+{
+	if (m_lines[m_j][1] == "END") 
+	{
+		m_out << "@@Label_" << (stoi(m_lines[m_j][0]) + 1) << ":\n";
+		m_out << "\thalt\n";
+		m_out << "END Start";
+		return true;
+	}
+	return false;
+}
+
+bool CodeGenerator::Goto()
+{
+	if (m_lines[m_j][1] == "GOTO") 
+	{
+		m_out << "@@Label_" << (stoi(m_lines[m_j][0]) + 1) << ":\n";
+		m_out << "\tjmp @@Label_" << m_lines[m_j][2] << "\n";
+		m_temp_point++;
+		m_j++;
+		return true;
+	}
+	return false;
+}
