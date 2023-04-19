@@ -52,6 +52,234 @@ std::vector<std::vector<std::string>> CodeGenerator::Run(std::vector<Token> lexe
 	return std::vector<std::vector<std::string>>();
 }
 
+
+bool CodeGenerator::Let()
+{
+	if (m_lines[m_j][1] == "LET") 
+	{
+		m_inserts.clear();
+		m_out << "@@Label_" << (stoi(m_lines[m_j][0]) + 1) << ":\n";
+
+		if (m_variables.size() == 0)
+			m_variables.push_back({ m_lines[m_j][2], 0 });
+		else 
+		{
+			for (m_var_num = 0; m_var_num < m_variables.size(); m_var_num++)
+				if (m_variables[m_var_num].first == m_lines[m_j][2]) { m_flag = true;	break; }
+			for (m_i = 4; m_i < m_lines[m_j].size(); m_i++)
+				for (int k = 0; k < m_variables.size(); k++)
+					if (m_lines[m_j][m_i] == m_variables[k].first)
+					{
+						m_lines[m_j].erase(m_lines[m_j].begin() + m_i);
+						m_lines[m_j].insert(m_lines[m_j].begin() + m_i, "R" + std::to_string(m_variables[k].second));
+						break;
+					}
+			if (!m_flag) m_variables.push_back({ m_lines[m_j][2], m_variables.back().second + 1 });
+		}
+		if (m_lines[m_j].size() > 5) 
+		{
+			LetGenVars();
+			LetGenExp();
+		}
+		else
+			if (m_flag)
+				m_out << "\tLD R" << m_variables[m_var_num].second << " " << m_lines[m_j][4] << "\n";
+			else 
+			{
+				m_out << "\tLD R" << m_variables.back().second << " " << m_lines[m_j][4] << "\n";
+			}
+		m_j++;
+		return true;
+	}
+	return false;
+}
+
+void CodeGenerator::LetGenVars()
+{
+	m_i = 0;
+	std::vector <std::string> in_exp = m_lines[m_j];
+	in_exp.erase(in_exp.begin(), in_exp.begin() + 4);
+	while (true) 
+	{
+		while ((m_i < in_exp.size()) and (in_exp[m_i] != ")"))
+			m_i++;
+		if (m_i == in_exp.size()) 
+		{
+			m_i = 0;
+			break;
+		}
+		else 
+		{
+			int j = m_i - 1;
+			std::vector<std::string> exp;
+			while ((j >= 0) and (in_exp[j] != "(")) 
+			{
+				exp.insert(exp.begin(), in_exp[j]);
+				j--;
+			}
+			in_exp.erase(in_exp.begin() + j, in_exp.begin() + m_i + 1);
+			if (m_inserts.size() == 0)
+				m_inserts.push_back({ exp, 1 });
+			else
+				m_inserts.push_back({ exp, m_inserts.back().second + 1 });
+			in_exp.insert(in_exp.begin() + j, "RL1" + std::to_string(m_inserts.back().second));
+			m_i = 0;
+			continue;
+		}
+		break;
+	}
+	while (true) 
+	{
+		m_i = 0;
+		int in_num = -1;
+		while (m_i < m_inserts.size()) 
+		{
+			if (m_inserts[m_i].first.size() <= 3) { m_i++; continue; }
+
+			bool check = false;
+			int k = 0;
+			while (k < m_inserts[m_i].first.size()) 
+			{
+				if ((m_inserts[m_i].first[k] == "*") or (m_inserts[m_i].first[k] == "/") or (m_inserts[m_i].first[k] == "^")) 
+				{
+					std::vector<std::string> help;
+					help.push_back(m_inserts[m_i].first[k - 1]); help.push_back(m_inserts[m_i].first[k]); help.push_back(m_inserts[m_i].first[k + 1]);
+					m_inserts.insert(m_inserts.begin() + m_i, { help, in_num });
+					in_num--;
+					m_i++;
+					m_inserts[m_i].first.erase(m_inserts[m_i].first.begin() + (k - 1), m_inserts[m_i].first.begin() + (k + 2));
+					m_inserts[m_i].first.insert(m_inserts[m_i].first.begin() + (k - 1), "R01" + std::to_string(-1 * m_inserts[m_i - 1].second));
+					check = true;
+				}
+				k++;
+			}
+			if (!check)
+				m_i++;
+		}
+		m_i = 0;
+		while (m_i < in_exp.size()) 
+		{
+			if ((in_exp[m_i] == "*") or (in_exp[m_i] == "/") or (in_exp[m_i] == "^")) 
+			{
+				std::vector<std::string> help;
+				help.push_back(in_exp[m_i - 1]); help.push_back(in_exp[m_i]); help.push_back(in_exp[m_i + 1]);
+				if (m_inserts.size() > 0)
+					m_inserts.push_back({ help, m_inserts.back().second + 1 });
+				else
+					m_inserts.push_back({ help,  1 });
+				in_exp.erase(in_exp.begin() + (m_i - 1), in_exp.begin() + (m_i + 2));
+				in_exp.insert(in_exp.begin() + (m_i - 1), "RL1" + std::to_string(m_inserts.back().second));
+				continue;
+			}
+			m_i++;
+		}
+		m_i = 0;
+		while (m_i < m_inserts.size()) 
+		{
+			if (m_inserts[m_i].first.size() < 4) { m_i++; continue; }
+
+			while ((m_inserts[m_i].first.size() > 3)) 
+			{
+				std::vector<std::string> help;
+				help.push_back(m_inserts[m_i].first[0]); help.push_back(m_inserts[m_i].first[1]); help.push_back(m_inserts[m_i].first[2]);
+				m_inserts.insert(m_inserts.begin() + m_i, { help, in_num });
+				in_num--;
+				m_i++;
+				m_inserts[m_i].first.erase(m_inserts[m_i].first.begin(), m_inserts[m_i].first.begin() + 3);
+				m_inserts[m_i].first.insert(m_inserts[m_i].first.begin(), "R01" + std::to_string(-1 * m_inserts[m_i - 1].second));
+			}
+		}
+		m_i = 0;
+		while (in_exp.size() > 3) 
+		{
+			std::vector<std::string> help;
+			help.push_back(in_exp[0]); help.push_back(in_exp[1]); help.push_back(in_exp[2]);
+			m_inserts.push_back({ help, m_inserts.back().second + 1 });
+			in_exp.erase(in_exp.begin(), in_exp.begin() + 3);
+			in_exp.insert(in_exp.begin(), "R1" + std::to_string(m_inserts.back().second));
+		}
+		if (in_exp.size() > 1)
+			m_inserts.push_back({ in_exp, 0 });
+		in_exp.clear();
+		break;
+	}
+}
+
+void CodeGenerator::LetGenExp()
+{
+	for (int k = 0; k < m_inserts.size() - 1; k++) 
+	{
+		if (m_inserts[k].first[1] == "+") 
+		{
+			if (m_inserts[k].second > 0)
+				m_out << "\tAdd RL1" + std::to_string(m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			else
+				m_out << "\tAdd R01" + std::to_string(-1 * m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			continue;
+		}
+		if (m_inserts[k].first[1] == "-") 
+		{
+			if (m_inserts[k].second > 0)
+				m_out << "\tSub RL1" + std::to_string(m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			else
+				m_out << "\tSub R01" + std::to_string(-1 * m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			continue;
+		}
+		if (m_inserts[k].first[1] == "*") 
+		{
+			if (m_inserts[k].second > 0)
+				m_out << "\tMul RL1" + std::to_string(m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			else
+				m_out << "\tMul R01" + std::to_string(-1 * m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			continue;
+		}
+		if (m_inserts[k].first[1] == "/") 
+		{
+			if (m_inserts[k].second > 0)
+				m_out << "\tDiv RL1" + std::to_string(m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			else
+				m_out << "\tDiv R01" + std::to_string(-1 * m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			continue;
+		}
+		if (m_inserts[k].first[1] == "^") 
+		{
+			if (m_inserts[k].second > 0)
+				m_out << "\tPow RL1" + std::to_string(m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			else
+				m_out << "\tPow R01" + std::to_string(-1 * m_inserts[k].second) << " " << m_inserts[k].first[0] << " " << m_inserts[k].first[2] << "\n";
+			continue;
+		}
+	}
+	if (m_inserts.back().first.size() == 1) m_inserts.pop_back();
+	if (m_flag)
+	{
+		if (m_inserts.back().first[1] == "+")
+			m_out << "\tAdd R" << m_variables[m_var_num].second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+		if (m_inserts.back().first[1] == "-")
+			m_out << "\tSub R" << m_variables[m_var_num].second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+		if (m_inserts.back().first[1] == "*")
+			m_out << "\tMul R" << m_variables[m_var_num].second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+		if (m_inserts.back().first[1] == "/")
+			m_out << "\tDiv R" << m_variables[m_var_num].second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+		if (m_inserts.back().first[1] == "^")
+			m_out << "\tPow R" << m_variables[m_var_num].second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+	}
+	else
+	{
+		if (m_inserts.back().first[1] == "+")
+			m_out << "\tAdd R" << m_variables.back().second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+		if (m_inserts.back().first[1] == "-")
+			m_out << "\tSub R" << m_variables.back().second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+		if (m_inserts.back().first[1] == "*")
+			m_out << "\tMul R" << m_variables.back().second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+		if (m_inserts.back().first[1] == "/")
+			m_out << "\tDiv R" << m_variables.back().second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+		if (m_inserts.back().first[1] == "^")
+			m_out << "\tPow R" << m_variables.back().second << " " << m_inserts.back().first[0] << " " << m_inserts.back().first[2] << "\n";
+	}
+}
+
+
 bool CodeGenerator::Rem()
 {
 	if (m_lines[m_j][1] == "REM") {
