@@ -16,7 +16,7 @@ int main()
     std::cout << "\n";
 
     Translator trans;
-    trans.GetLexems(filename, false);
+    trans.Translate(filename);
 
     return 0;
 }
