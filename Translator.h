@@ -1,31 +1,40 @@
 #pragma once
 #include "LexicalBlock.h"
+#include "Syntaxer.h"
+#include "CodeGenerator.h"
 
 class Translator
 {
 public:
     /*
-    * @brief РўСЂР°РЅСЃР»РёСЂСѓРµС‚ РєРѕРґ РёР· filename (РџРѕРєР° С‡С‚Рѕ РµСЃС‚СЊ С‚РѕР»СЊРєРѕ Р»РµРєСЃРёС‡РµСЃРєРёР№ Р±Р»РѕРє)
-    * @param filename: РёРјСЏ С„Р°Р№Р»Р° СЃ РїСЂРѕРіСЂР°РјРјРѕР№
+    * @brief Транслирует код из filename (Пока что есть только лексический блок)
+    * @param filename: имя файла с программой
     */
     void Translate(std::string filename);
 
     /*
-    * @brief Р Р°Р·Р±РёРІР°РµС‚ РїСЂРѕРіСЂР°РјРјСѓ РЅР° Р»РµРєСЃРµРјС‹ Рё РІС‹РІРѕРґРёС‚ РёС…
-    * @param filename: РёРјСЏ С„Р°Р№Р»Р° СЃ РїСЂРѕРіСЂР°РјРјРѕР№
-    * @param toPrint: true, С‡С‚РѕР±С‹ РІС‹РІРµСЃС‚Рё Р»РµРєСЃРµРјС‹ РЅР° СЌРєСЂР°РЅ, false - РЅРµ РІС‹РІРѕРґРёС‚СЊ (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ false)
-    * @returns m_lexems: РІРµРєС‚РѕСЂ Р»РµРєСЃРµРј
+    * @brief Разбивает программу на лексемы и выводит их
+    * @param filename: имя файла с программой
+    * @param toPrint: true, чтобы вывести лексемы на экран, false - не выводить (по умолчанию false)
+    * @returns m_lexems: вектор лексем
     */
-    std::vector<Token> GetLexems(std::string filename, bool toPrint = false);
+    std::vector<Token> RunLexer(std::string filename);
 
     /*
-    * @brief РџСЂРѕРІРµСЂСЏРµС‚ СЃРёРЅС‚Р°РєСЃРёСЃ РїСЂРѕРіСЂР°РјРјС‹
-    * @param filename: РёРјСЏ С„Р°Р№Р»Р° СЃ РїСЂРѕРіСЂР°РјРјРѕР№
-    * @returns true - РїСЂРѕРіСЂР°РјРјР° РїРѕРґС…РѕРґРёС‚, false - РЅРµ РїРѕРґС…РѕРґРёС‚
+    * @brief Проверяет синтаксис программы
+    * @returns m_lines: вектор строк
     */
-    bool CheckSyntax(std::string filename);
+    std::vector<std::vector<std::string>> CheckSyntax();
+
+    /*
+    * @brief Переводит код из Mini-Basic в Assembler
+    */
+    void TranslateCode();
 private:
-    LexicalBlock m_lexer;       // Р»РµРєСЃРёС‡РµСЃРєРёР№ Р±Р»РѕРє
-    std::vector<Token> m_lexems;// РІРµРєС‚РѕСЂ Р»РµРєСЃРµРј
+    CodeGenerator m_gen;                            // генератор кода
+    Syntaxer m_synt;                                // синтаксер
+    LexicalBlock m_lexer;                           // лексический блок
+    std::vector<std::vector<std::string>> m_lines;  // вектор строк
+    std::vector<Token> m_lexems;                    // вектор лексем
 };
 
