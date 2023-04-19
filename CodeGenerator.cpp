@@ -79,3 +79,78 @@ bool CodeGenerator::Gosub()
 	}
 	return false;
 }
+
+bool CodeGenerator::For()
+{
+	if (m_lines[m_j][1] == "FOR") 
+	{
+		if (m_variables.size() == 0)
+			m_variables.push_back({ m_lines[m_j][2], 0 });
+		else {
+			bool flag = false;
+			for (m_var_num = 0; m_var_num < m_variables.size(); m_var_num++)
+				if (m_variables[m_var_num].first == m_lines[m_j][2]) { flag = true;	break; }
+			if (!flag)
+				m_variables.push_back({ m_lines[m_j][2], m_variables.back().second + 1 });
+		}
+		m_out << "\tLD R" << m_variables[m_var_num].second << " " << m_lines[m_j][4] << "\n";
+		int k = 0;
+		m_out << "@@Label_" << (stoi(m_lines[m_j][0]) + 1) << ":\n";
+		m_out << "\tLD R00001 " << m_lines[m_j][6] << "\n";
+		while ((m_j < m_lines.size()) and (m_lines[m_j][1] != "NEXT")) 
+		{
+			m_j++;
+			k++;
+		}
+		m_out << "\tSub R02 R00001 R" << m_variables.back().second << "\n";
+		m_out << "\tBLTZ R02 @@Label_" << stoi(m_lines[m_j][0]) + 2 << "\n";
+		m_j -= k;
+		m_j++;
+		return true;
+	}
+	return false;
+}
+
+bool CodeGenerator::Next()
+{
+	if (m_lines[m_j][1] == "NEXT") 
+	{
+		m_out << "@@Label_" << (stoi(m_lines[m_j][0]) + 1) << ":\n";
+		int k = 0;
+		m_temp_point++;
+		while ((m_j > 0) and (m_lines[m_j][1] != "FOR")) 
+		{
+			m_j--;
+			k++;
+		}
+		int t = m_variables.size() - 1;
+		while (m_variables[t].first != m_lines[m_j][2])
+			t--;
+		if (m_lines[m_j].size() > 7) 
+		{
+			m_out << "\tAdd R" << m_variables[t].second << " " << m_lines[m_j][8] << "\n";
+			m_out << "\tjmp @@Label_" << stoi(m_lines[m_j][0]) + 1 << '\n';
+		}
+		else {
+			m_out << "\tinc R" << m_variables[t].second << "\n";
+			m_out << "\tjmp @@Label_" << stoi(m_lines[m_j][0]) + 1 << '\n';
+		}
+		m_j += k;
+		m_j++;
+		return true;
+	}
+	return false;
+}
+
+bool CodeGenerator::Return()
+{
+	if (m_lines[m_j][1] == "RETURN") 
+	{
+		m_out << "@@Label_" << (stoi(m_lines[m_j][0]) + 1) << ":\n";
+		m_out << "\tBR *10\n";
+		m_temp_point++;
+		m_j++;
+		return true;
+	}
+	return false;
+}
