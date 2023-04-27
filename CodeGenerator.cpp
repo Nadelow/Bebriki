@@ -66,6 +66,7 @@ bool CodeGenerator::Let()
 		{
 			for (m_var_num = 0; m_var_num < m_variables.size(); m_var_num++)
 				if (m_variables[m_var_num].first == m_lines[m_j][2]) { m_flag = true;	break; }
+			if (m_var_num) m_var_num--;
 			for (m_i = 4; m_i < m_lines[m_j].size(); m_i++)
 				for (int k = 0; k < m_variables.size(); k++)
 					if (m_lines[m_j][m_i] == m_variables[k].first)
