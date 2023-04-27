@@ -68,7 +68,7 @@ int LexicalBlock::s_H1f()
     if (!Get_lexem(m_line, m_lexem))
     {
         m_lexems.pop_back();
-        m_lexems.push_back(Token(m_line, std::string("Error"), std::string("Error in m_constant")));
+        m_lexems.push_back(Token(m_line, std::string("Error"), std::string("Error in Constant")));
         m_lexem.clear();
         m_copy.clear();
         m_constant = false;
@@ -168,7 +168,7 @@ int LexicalBlock::s_G1()
         {
             m_constant = false;
             m_word = true;
-            m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+            m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             m_copy.clear();
             m_copy = m_lexem;
             m_lexem.clear();
@@ -575,10 +575,10 @@ int LexicalBlock::s_A2b()
                     if (m_mark)
                         m_lexems.push_back(Token(m_line, std::string("Error"), std::string("Empty m_line")));
                     else
-                        m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                        m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
                 else
                     m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
-        if (m_lexems.back().lexem_type == std::string("m_mark"))
+        if (m_lexems.back().lexem_type == std::string("Mark"))
             m_lexems.push_back(Token(m_line, std::string("Error"), std::string("Empty m_line")));
         m_lexem.clear();
         m_word = false;
@@ -719,9 +719,9 @@ int LexicalBlock::s_A3a()
         else
         {
             if (m_lexem.size() > 0)
-                m_lexems.push_back(Token(m_line, std::string("m_mark"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Mark"), m_lexem));
             else
-                m_lexems.push_back(Token(m_line, std::string("Error"), std::string("Error in m_mark")));
+                m_lexems.push_back(Token(m_line, std::string("Error"), std::string("Error in Mark")));
             m_mark = false;
             m_lexem.clear();
         }
@@ -739,7 +739,7 @@ int LexicalBlock::s_A3d()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "REM")
@@ -760,7 +760,7 @@ int LexicalBlock::s_A3b()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "REM")
@@ -782,7 +782,7 @@ int LexicalBlock::s_A3f()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "REM")
@@ -809,7 +809,7 @@ int LexicalBlock::s_B1b()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "REM")
@@ -837,7 +837,7 @@ int LexicalBlock::s_B1()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "REM")
@@ -854,7 +854,7 @@ int LexicalBlock::s_B1d()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "REM")
@@ -881,7 +881,7 @@ int LexicalBlock::s_C1()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "REM")
@@ -901,7 +901,7 @@ int LexicalBlock::s_C2a()
 {
     if (m_lexem.size() == 0)
     {
-        if ((m_lexems.back().lexem_type != std::string("m_constant")) and (m_lexems.back().lexem_type != std::string("Variable")) and (m_lexems.back().lexem_type != std::string("Right_bracket")))
+        if ((m_lexems.back().lexem_type != std::string("Constant")) and (m_lexems.back().lexem_type != std::string("Variable")) and (m_lexems.back().lexem_type != std::string("Right_bracket")))
         {
             m_constant = true;
             m_lexem += m_buffer[m_i];
@@ -947,7 +947,7 @@ int LexicalBlock::s_D1a()
                     return 1;
                 }
                 else
-                    m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                    m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "REM")
@@ -970,7 +970,7 @@ int LexicalBlock::s_D2a()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "rem")
@@ -997,7 +997,7 @@ int LexicalBlock::s_D2c()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     if (m_lexem == "rem")
@@ -1064,7 +1064,7 @@ int LexicalBlock::s_E1a()
     if (m_lexem.size() > 0)
         if (!(Get_lexem(m_line, m_lexem)))
             if (isdigit(m_lexem[0]))
-                m_lexems.push_back(Token(m_line, std::string("m_constant"), m_lexem));
+                m_lexems.push_back(Token(m_line, std::string("Constant"), m_lexem));
             else
                 m_lexems.push_back(Token(m_line, std::string("Variable"), m_lexem));
     m_lexem.clear();
