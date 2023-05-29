@@ -50,6 +50,8 @@ void MainWindow::load_text(QString filename){
             text_pole_in->append(in_line);
         }
 
+        text_on_screen->setText("Открыт " + m_filename);
+
         file.close();
     }else{
         QErrorMessage* dialog = new QErrorMessage(this);

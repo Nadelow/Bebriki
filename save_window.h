@@ -15,14 +15,27 @@ public:
     ~Save_window();
 
 signals:
+    /**
+     * @brief Сигнал отправки имени
+     */
     void s_file_name (QString);
 
 
 private:
+    /**
+     * @brief Строка ввода
+     */
     QLineEdit* input_line;
+
+    /**
+     * @brief Кнопка принятия
+     */
     QPushButton* accept_b;
 
 private slots:
+    /**
+     * @brief Функция нажатия на кнопку принятия
+     */
     void on_Accept_b_clicked();
 
 };
