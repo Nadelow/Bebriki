@@ -411,6 +411,8 @@ private:
 	std::vector <std::string> m_line;                      // текущая строка
 	std::vector <std::vector<std::string>> m_lines;        // вектор всех строк
 
+    std::ofstream m_out;                                   // файл вывода
+
 	bool m_key = false;                                    // метка ключевого слова
 	bool m_is_ended = false;                               // метка end
 

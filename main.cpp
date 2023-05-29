@@ -1,22 +1,11 @@
-﻿// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+#include "mainwindow.h"
 
-#include <iostream>
-#include "Translator.h"
+#include <QApplication>
 
-int main()
+int main(int argc, char *argv[])
 {
-    std::string filename;
-
-    while (filename.empty())
-    {
-        std::cout << "Enter file name: ";
-        std::cin >> filename;
-    }
-    std::cout << "\n";
-
-    Translator trans;
-    trans.Translate(filename);
-
-    return 0;
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
+    return a.exec();
 }

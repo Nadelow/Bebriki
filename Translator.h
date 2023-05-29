@@ -7,33 +7,34 @@ class Translator
 {
 public:
     /*
-    * @brief РўСЂР°РЅСЃР»РёСЂСѓРµС‚ РєРѕРґ РёР· filename
-    * @param filename: РёРјСЏ С„Р°Р№Р»Р° СЃ РїСЂРѕРіСЂР°РјРјРѕР№
+    * @brief Транслирует код из filename (Пока что есть только лексический блок)
+    * @param filename: имя файла с программой
     */
     void Translate(std::string filename);
 
     /*
-    * @brief Р Р°Р·Р±РёРІР°РµС‚ РїСЂРѕРіСЂР°РјРјСѓ РЅР° Р»РµРєСЃРµРјС‹ Рё РІС‹РІРѕРґРёС‚ РёС…
-    * @param filename: РёРјСЏ С„Р°Р№Р»Р° СЃ РїСЂРѕРіСЂР°РјРјРѕР№
-    * @returns m_lexems: РІРµРєС‚РѕСЂ Р»РµРєСЃРµРј
+    * @brief Разбивает программу на лексемы и выводит их
+    * @param filename: имя файла с программой
+    * @param toPrint: true, чтобы вывести лексемы на экран, false - не выводить (по умолчанию false)
+    * @returns m_lexems: вектор лексем
     */
     std::vector<Token> RunLexer(std::string filename);
 
     /*
-    * @brief РџСЂРѕРІРµСЂСЏРµС‚ СЃРёРЅС‚Р°РєСЃРёСЃ РїСЂРѕРіСЂР°РјРјС‹
-    * @returns m_lines: РІРµРєС‚РѕСЂ СЃС‚СЂРѕРє
+    * @brief Проверяет синтаксис программы
+    * @returns m_lines: вектор строк
     */
     std::vector<std::vector<std::string>> CheckSyntax();
 
     /*
-    * @brief РџРµСЂРµРІРѕРґРёС‚ РєРѕРґ РёР· Mini-Basic РІ Assembler
+    * @brief Переводит код из Mini-Basic в Assembler
     */
     void TranslateCode();
 private:
-    CodeGenerator* m_gen = nullptr;                  // РіРµРЅРµСЂР°С‚РѕСЂ РєРѕРґР°
-    Syntaxer* m_synt = nullptr;                      // СЃРёРЅС‚Р°РєСЃРµСЂ
-    LexicalBlock* m_lexer = nullptr;                 // Р»РµРєСЃРёС‡РµСЃРєРёР№ Р±Р»РѕРє
-    std::vector<std::vector<std::string>> m_lines;   // РІРµРєС‚РѕСЂ СЃС‚СЂРѕРє
-    std::vector<Token> m_lexems;                     // РІРµРєС‚РѕСЂ Р»РµРєСЃРµРј
+    CodeGenerator* m_gen;                            // генератор кода
+    Syntaxer* m_synt;                                // синтаксер
+    LexicalBlock* m_lexer;                           // лексический блок
+    std::vector<std::vector<std::string>> m_lines;  // вектор строк
+    std::vector<Token> m_lexems;                    // вектор лексем
 };
 
