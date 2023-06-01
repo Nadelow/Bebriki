@@ -1,0 +1,27 @@
+1 LET n=25
+2 LET m=50
+3 LET count=0
+4 FOR d=2 TO d
+5 IF n<>(n/d)*d GOTO 14
+6 FOR tmp=2 TO d
+7 IF d=(d/tmp)*tmp GOTO 9
+8 GOTO 10
+9 LET count=count+1
+10 NEXT tmp
+11 IF count<>1 GOTO 13
+12 LET res1=d
+13 LET count=0
+14 NEXT d
+15 LET count=0
+16 FOR d=2 TO n
+17 IF n<>(n/d)*d GOTO 26
+18 FOR tmp=2 TO d
+19 IF d=(d/tmp)*tmp GOTO 21
+20 GOTO  22
+21 LET count=count+1
+22 NEXT tmp
+23 IF count<>1 GOTO 25
+24 LET res2=d
+25 LET count=0
+26 NEXT d
+27 END

@@ -1,0 +1,4 @@
+1 LET n=5
+2 IF n<>(n*n-(n*n/10)*10) GOTO 4
+3 REM avto
+4 END
